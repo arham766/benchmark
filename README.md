@@ -213,7 +213,7 @@ Important: The task set is stored in base64 encoding to prevent data contaminati
 
 ## Online-Mind2Web
 
-The [Online-Mind2Web](https://github.com/OSU-NLP-Group/Online-Mind2Web), evaluated across agent frameworks
+The [Online-Mind2Web](https://github.com/OSU-NLP-Group/Online-Mind2Web) benchmark is evaluated across agent frameworks.
 
 <picture>
   <source media="(prefers-color-scheme: light)" srcset="online-mind2web/official_plots/success_rate_light.png">
