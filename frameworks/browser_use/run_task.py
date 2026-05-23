@@ -12,10 +12,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from dotenv import load_dotenv
 from browser_use import Agent, Browser
-from lmnr import observe
 from browsers import BROWSERS
 from models import MODELS
-from laminar import LaminarService
 from frameworks import (
     ExecutionResult,
     load_tasks,
@@ -42,7 +40,6 @@ def encode_screenshots(paths: list[str]) -> list[str]:
     return result
 
 
-@observe(span_type="EXECUTOR")
 async def execute(
     task_description: str, llm, browser_name: str, use_vision: bool = True
 ) -> ExecutionResult:
@@ -92,7 +89,6 @@ async def main():
     params = validate_params(parse_params(), ACCEPTED_PARAMS)
     task_index = int(os.environ["TASK_INDEX"])
     model_name = os.environ["MODEL"]
-    eval_id = os.environ["EVAL_ID"]
     browser_name = os.environ.get("BROWSER", "browser-use-cloud")
     benchmark = os.environ.get("BENCHMARK", "BU_Bench_V1")
 
@@ -103,9 +99,6 @@ async def main():
         tasks = interleave(tasks)
     task = tasks[task_index]
     task["_index"] = task_index
-
-    LaminarService.initialize()
-    LaminarService.attach_evaluation(eval_id)
 
     llm = MODELS[model_name]()
     execute_fn = partial(

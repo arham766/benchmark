@@ -47,8 +47,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from dotenv import load_dotenv
-from lmnr import Laminar
-from laminar import LaminarService
 from frameworks import (
     ExecutionResult,
     load_tasks,
@@ -261,11 +259,6 @@ async def execute(task_description: str) -> ExecutionResult:
         shutil.rmtree(state_dir)
     state_dir.mkdir(parents=True)
 
-    # Laminar parent-span: same pattern as bcode. `but` does not (yet)
-    # honor LMNR_PARENT_SPAN_CONTEXT, so this is a forward-compat hook --
-    # passing the env var costs nothing on the current version.
-    parent_span_context = Laminar.serialize_span_context()
-
     try:
         system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
         full_task = f"{system_prompt.strip()}\n\nTask:\n{task_description}"
@@ -279,9 +272,6 @@ async def execute(task_description: str) -> ExecutionResult:
         # Default state-dir for `but`. Explicitly passed below too.
         "LLM_BROWSER_STATE_DIR": str(state_dir),
     }
-    if parent_span_context:
-        env["LMNR_PARENT_SPAN_CONTEXT"] = parent_span_context
-
     # NOTE: `--state-dir` is a TOP-LEVEL arg on browser-use-terminal -- it
     # must come BEFORE the `run` subcommand, otherwise argparse rejects it
     # as an unrecognized argument on `run`. Same for `--config`.
@@ -433,7 +423,6 @@ async def execute(task_description: str) -> ExecutionResult:
 
 async def main():
     task_index = int(os.environ["TASK_INDEX"])
-    eval_id = os.environ["EVAL_ID"]
     benchmark = os.environ.get("BENCHMARK", "BU_Bench_V1")
 
     early_params = parse_params()
@@ -445,9 +434,6 @@ async def main():
         tasks = interleave(tasks)
     task = tasks[task_index]
     task["_index"] = task_index
-
-    LaminarService.initialize()
-    LaminarService.attach_evaluation(eval_id)
 
     await run_and_judge(task, execute)
 

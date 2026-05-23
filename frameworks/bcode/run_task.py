@@ -42,8 +42,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from dotenv import load_dotenv
-from lmnr import Laminar
-from laminar import LaminarService
 from frameworks import (
     ExecutionResult,
     load_tasks,
@@ -235,7 +233,6 @@ async def execute(task_description: str) -> ExecutionResult:
     # compatible with both harness eras.
     browser_id, cdp_ws = _start_browser()
 
-    parent_span_context = Laminar.serialize_span_context()
     # Reset and route the screenshot dump dir BEFORE bcode starts. v0.1.2+
     # writes every Page.captureScreenshot result here (in addition to the
     # auto-attach to the agent's next turn -- same tap, two consumers).
@@ -245,8 +242,6 @@ async def execute(task_description: str) -> ExecutionResult:
         "BU_CDP_WS": cdp_ws,
         "BCODE_SCREENSHOT_DIR": str(SHOTS_DIR),
     }
-    if parent_span_context:
-        env["LMNR_PARENT_SPAN_CONTEXT"] = parent_span_context
     # fetch_use=false -> inject opencode.json-equivalent config disabling the
     # fetch-use proxy. OPENCODE_CONFIG_CONTENT is merged with local-scope
     # precedence at startup (see packages/opencode/src/config/config.ts:593),
@@ -370,7 +365,6 @@ async def execute(task_description: str) -> ExecutionResult:
 
 async def main():
     task_index = int(os.environ["TASK_INDEX"])
-    eval_id = os.environ["EVAL_ID"]
     benchmark = os.environ.get("BENCHMARK", "BU_Bench_V1")
 
     # Propagate task_timeout param to run_and_judge before it wraps execute().
@@ -383,9 +377,6 @@ async def main():
         tasks = interleave(tasks)
     task = tasks[task_index]
     task["_index"] = task_index
-
-    LaminarService.initialize()
-    LaminarService.attach_evaluation(eval_id)
 
     await run_and_judge(task, execute)
 

@@ -43,8 +43,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from dotenv import load_dotenv
-from lmnr import Laminar
-from laminar import LaminarService
 from frameworks import (
     ExecutionResult,
     load_tasks,
@@ -203,8 +201,6 @@ async def execute(task_description: str) -> ExecutionResult:
             shutil.rmtree(state_dir)
         state_dir.mkdir(parents=True)
 
-        parent_span_context = Laminar.serialize_span_context()
-
         system_prompt = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8")
         full_task = f"{system_prompt.strip()}\n\nTask:\n{task_description}"
 
@@ -214,14 +210,7 @@ async def execute(task_description: str) -> ExecutionResult:
             # directly via `_ensure_managed_chrome`/`_ensure_cloud_browser` short
             # circuits. Pass both URL forms for robustness.
             "BU_CDP_WS": cdp_ws,
-            # Force flush on one-shot CLI runs so OTLP spans actually leave the
-            # process before exit (see docs/README on this branch).
-            "LLM_BROWSER_LAMINAR_FLUSH_ON_FINISH": "1",
         }
-        if parent_span_context:
-            # Forward-compat: but-rust telemetry doesn't honor this yet, but it
-            # doesn't error on unknown env either.
-            env["LMNR_PARENT_SPAN_CONTEXT"] = parent_span_context
 
         # `--state-dir` is a TOP-LEVEL arg on the Rust CLI -- must come BEFORE
         # the subcommand.
@@ -366,7 +355,6 @@ async def execute(task_description: str) -> ExecutionResult:
 
 async def main():
     task_index = int(os.environ["TASK_INDEX"])
-    eval_id = os.environ["EVAL_ID"]
     benchmark = os.environ.get("BENCHMARK", "BU_Bench_V1")
 
     early_params = parse_params()
@@ -378,9 +366,6 @@ async def main():
         tasks = interleave(tasks)
     task = tasks[task_index]
     task["_index"] = task_index
-
-    LaminarService.initialize()
-    LaminarService.attach_evaluation(eval_id)
 
     await run_and_judge(task, execute)
 

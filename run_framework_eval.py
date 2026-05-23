@@ -115,7 +115,6 @@ async def _run_one(
         {
             "MODEL": model,
             "TASK_INDEX": str(task_index),
-            "EVAL_ID": "local",
             "FRAMEWORK": framework,
             "BROWSER": browser,
             "BENCHMARK": benchmark,

@@ -19,7 +19,6 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 
 from dotenv import load_dotenv
-from laminar import LaminarService
 from frameworks import (
     ExecutionResult,
     load_tasks,
@@ -69,7 +68,6 @@ async def execute(task_description: str) -> ExecutionResult:
 async def main():
     validate_params(parse_params(), ACCEPTED_PARAMS)
     task_index = int(os.environ["TASK_INDEX"])
-    eval_id = os.environ["EVAL_ID"]
     benchmark = os.environ.get("BENCHMARK", "BU_Bench_V1")
 
     tasks = load_tasks(benchmark)
@@ -77,9 +75,6 @@ async def main():
         tasks = interleave(tasks)
     task = tasks[task_index]
     task["_index"] = task_index
-
-    LaminarService.initialize()
-    LaminarService.attach_evaluation(eval_id)
 
     await run_and_judge(task, execute)
 

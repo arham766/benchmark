@@ -26,7 +26,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent))
 HARNESS_DIR = "/tmp/browser-harness"
 
 from dotenv import load_dotenv
-from laminar import LaminarService
 from frameworks import (
     ExecutionResult,
     load_tasks,
@@ -191,7 +190,7 @@ def _format_tool_result_block(block: dict) -> str | None:
     content = content.strip()
     if not content:
         return None
-    # Cap per-step size so Laminar payloads stay reasonable.
+    # Keep per-step output compact.
     return f"{prefix}: {content[:2000]}"
 
 
@@ -412,7 +411,6 @@ async def execute(task_description: str) -> ExecutionResult:
 
 async def main():
     task_index = int(os.environ["TASK_INDEX"])
-    eval_id = os.environ["EVAL_ID"]
     benchmark = os.environ.get("BENCHMARK", "BU_Bench_V1")
 
     # Propagate task_timeout param to run_and_judge before it wraps execute().
@@ -425,9 +423,6 @@ async def main():
         tasks = interleave(tasks)
     task = tasks[task_index]
     task["_index"] = task_index
-
-    LaminarService.initialize()
-    LaminarService.attach_evaluation(eval_id)
 
     await run_and_judge(task, execute)
 
