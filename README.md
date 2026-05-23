@@ -96,16 +96,28 @@ Available providers: `browser-use-cloud`, `anchor`, `browserbase`, `browserless`
 
 **100 hand-selected tasks for evaluating browser automation agents**
 
-<picture>
-  <source media="(prefers-color-scheme: light)" srcset="official_plots/accuracy_by_model_light.png">
-  <source media="(prefers-color-scheme: dark)" srcset="official_plots/accuracy_by_model_dark.png">
-  <img alt="Accuracy by Model" src="official_plots/accuracy_by_model_light.png" width="100%">
-</picture>
+### Comparing Agent Frameworks
 
 <picture>
-  <source media="(prefers-color-scheme: light)" srcset="official_plots/accuracy_vs_throughput_light.png">
-  <source media="(prefers-color-scheme: dark)" srcset="official_plots/accuracy_vs_throughput_dark.png">
-  <img alt="Accuracy vs Latency" src="official_plots/accuracy_vs_throughput_light.png" width="100%">
+  <source media="(prefers-color-scheme: light)" srcset="official_plots/best_of_frameworks_public_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="official_plots/best_of_frameworks_public_dark.png">
+  <img alt="BU Bench V1 Comparing Agent Frameworks" src="official_plots/best_of_frameworks_public_light.png" width="100%">
+</picture>
+
+### Comparing Models for Browser Use
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="official_plots/browser_use_framework_by_model_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="official_plots/browser_use_framework_by_model_dark.png">
+  <img alt="BU Bench V1 Comparing Models for Browser Use" src="official_plots/browser_use_framework_by_model_light.png" width="100%">
+</picture>
+
+### Comparing Models for BrowserCode
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="official_plots/browser_harness_by_model_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="official_plots/browser_harness_by_model_dark.png">
+  <img alt="BU Bench V1 Comparing Models for BrowserCode" src="official_plots/browser_harness_by_model_light.png" width="100%">
 </picture>
 
 ### Running BU Bench
@@ -192,6 +204,22 @@ Important: The task set is stored in base64 encoding to prevent data contaminati
 | `confirmed_task` | Task instruction |
 | `category` | Source benchmark |
 | `answer` | Ground truth (if applicable) |
+
+<br/>
+
+---
+
+<br/>
+
+## Online-Mind2Web
+
+The [Online-Mind2Web](https://github.com/OSU-NLP-Group/Online-Mind2Web), evaluated across agent frameworks
+
+<picture>
+  <source media="(prefers-color-scheme: light)" srcset="online-mind2web/official_plots/success_rate_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="online-mind2web/official_plots/success_rate_dark.png">
+  <img alt="Online-Mind2Web Success Rate" src="online-mind2web/official_plots/success_rate_light.png" width="100%">
+</picture>
 
 <br/>
 
