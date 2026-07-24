@@ -1,0 +1,322 @@
+[
+ {
+  "website": "indeed.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "copilot.microsoft.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "gamestop.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "perplexity.ai",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "chatgpt.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "stockx.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "doordash.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "producthunt.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "sciencedirect.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "genius.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "nestle.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "stackexchange.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "redbubble.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "glassdoor.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "mckinsey.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "shein.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "x.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "zoro.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "canva.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "science.org",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "pexels.com",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "columbia.edu",
+  "category": "Cloudflare"
+ },
+ {
+  "website": "reddit.com",
+  "category": "reCaptcha"
+ },
+ {
+  "website": "sephora.com",
+  "category": "reCaptcha"
+ },
+ {
+  "website": "mercari.com",
+  "category": "reCaptcha"
+ },
+ {
+  "website": "williams-sonoma.com",
+  "category": "reCaptcha"
+ },
+ {
+  "website": "paramountplus.com",
+  "category": "reCaptcha"
+ },
+ {
+  "website": "qatarairways.com",
+  "category": "reCaptcha"
+ },
+ {
+  "website": "walmart.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "wayfair.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "zoominfo.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "zillow.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "bloomberg.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "pacsun.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "priceline.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "belk.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "anntaylor.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "yeti.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "ralphlauren.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "fiverr.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "bathandbodyworks.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "anthropologie.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "ashleyfurniture.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "seatgeek.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "kohls.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "samsclub.com",
+  "category": "PerimeterX"
+ },
+ {
+  "website": "immobiliare.it",
+  "category": "Datadome"
+ },
+ {
+  "website": "idealista.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "yelp.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "etsy.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "alltrails.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "wsj.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "wellfound.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "leboncoin.fr",
+  "category": "Datadome"
+ },
+ {
+  "website": "expedia.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "tripadvisor.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "g2.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "forbes.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "hermes.com",
+  "category": "Datadome"
+ },
+ {
+  "website": "oura.com",
+  "category": "hCaptcha"
+ },
+ {
+  "website": "boots.com",
+  "category": "hCaptcha"
+ },
+ {
+  "website": "davidjones.com",
+  "category": "hCaptcha"
+ },
+ {
+  "website": "fotocasa.es",
+  "category": "GeeTest"
+ },
+ {
+  "website": "smythstoys.com",
+  "category": "GeeTest"
+ },
+ {
+  "website": "lianjia.com",
+  "category": "GeeTest"
+ },
+ {
+  "website": "prologis.com",
+  "category": "GeeTest"
+ },
+ {
+  "website": "hm.com",
+  "category": "Akamai"
+ },
+ {
+  "website": "ray-ban.com",
+  "category": "Akamai"
+ },
+ {
+  "website": "adidas.com",
+  "category": "Akamai"
+ },
+ {
+  "website": "newbalance.com",
+  "category": "Akamai"
+ },
+ {
+  "website": "homedepot.com",
+  "category": "Akamai"
+ },
+ {
+  "website": "macys.com",
+  "category": "Akamai"
+ },
+ {
+  "website": "nordstrom.com",
+  "category": "Shape"
+ },
+ {
+  "website": "crocs.com",
+  "category": "Kasada"
+ },
+ {
+  "website": "temu.com",
+  "category": "Temu Slider"
+ },
+ {
+  "website": "lululemon.com",
+  "category": "Custom Antibot"
+ },
+ {
+  "website": "ediblearrangements.com",
+  "category": "Custom Antibot"
+ },
+ {
+  "website": "game.co.uk",
+  "category": "Custom Antibot"
+ },
+ {
+  "website": "douyin.com",
+  "category": "Custom Antibot"
+ },
+ {
+  "website": "deviantart.com",
+  "category": "Custom Antibot"
+ }
+]

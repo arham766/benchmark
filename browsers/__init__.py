@@ -15,6 +15,7 @@ from browsers import (
     onkernel,
     rebrowser,
     steel,
+    tilion,
 )
 
 PROVIDERS = [
@@ -28,6 +29,7 @@ PROVIDERS = [
     "onkernel",
     "rebrowser",
     "steel",
+    "tilion",
 ]
 
 BROWSERS = {
@@ -42,6 +44,7 @@ BROWSERS = {
     "onkernel": onkernel,
     "rebrowser": rebrowser,
     "steel": steel,
+    "tilion": tilion,
 }
 
 

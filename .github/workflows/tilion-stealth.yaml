@@ -1,0 +1,65 @@
+name: Tilion Stealth Bench
+
+# Runs the browser-use Stealth Bench against a Tilion browser, from a cloud runner (never a laptop:
+# a local 3.6h run lost 52/80 tasks to getaddrinfo/DNS failures). Agent + judge both go through
+# OpenRouter so no Google credential is needed.
+
+on:
+  workflow_dispatch:
+    inputs:
+      bench:
+        description: 'Stealth_Bench_V1 or BU_Bench_V1'
+        required: false
+        default: 'Stealth_Bench_V1'
+      tasks:
+        description: 'number of tasks (blank = all 80)'
+        required: false
+        default: ''
+      concurrency:
+        description: 'parallel agents'
+        required: false
+        default: '6'
+      target:
+        description: 'staging or prod'
+        required: false
+        default: 'staging'
+        type: choice
+        options: [staging, prod]
+
+jobs:
+  stealth:
+    runs-on: ubuntu-latest
+    timeout-minutes: 320
+    steps:
+      - uses: actions/checkout@v4
+      - name: Runner location
+        run: curl -s --max-time 15 https://ipinfo.io/json || true
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+      - name: Sync deps
+        run: uv sync
+      - name: Run stealth harness
+        env:
+          BENCH: ${{ inputs.bench }}
+          MAX_CONCURRENT: ${{ inputs.concurrency }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+          BROWSER_USE_API_KEY: ${{ secrets.BROWSER_USE_API_KEY }}
+          TILION_API_KEY: ${{ inputs.target == 'prod' && secrets.TILION_API_KEY || secrets.TILION_STG_API_KEY }}
+          TILION_BASE_URL: ${{ inputs.target == 'prod' && 'https://api.tilion.dev' || 'https://tilion-control-staging.fly.dev' }}
+        run: |
+          echo "bench=$BENCH target=${{ inputs.target }} base=$TILION_BASE_URL concurrency=$MAX_CONCURRENT"
+          if [ -n "${{ inputs.tasks }}" ]; then
+            uv run python run_eval.py --browser tilion --tasks ${{ inputs.tasks }}
+          else
+            uv run python run_eval.py --browser tilion
+          fi
+      - name: Show result json
+        if: always()
+        run: |
+          for f in results/*.json; do echo "--- $f ---"; cat "$f"; echo; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: stealth-results
+          path: results/
+          if-no-files-found: warn

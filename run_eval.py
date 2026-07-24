@@ -34,15 +34,27 @@ from cryptography.fernet import Fernet
 from dotenv import load_dotenv
 from browser_use import Agent, Browser, ChatGoogle
 from browser_use.llm import ChatBrowserUse
+from browser_use.llm.openai.chat import ChatOpenAI
 from browsers import PROVIDERS, get_provider
 from judge import construct_judge_messages, JudgementResult
 
 load_dotenv()
 
-# Judge LLM - always use gemini-2.5-flash for consistent judging across all evaluations
-JUDGE_LLM = ChatGoogle(model="gemini-2.5-flash", api_key=os.getenv("GOOGLE_API_KEY"))
+# Judge + agent LLM. Upstream hardcodes Google; when OPENROUTER_API_KEY is set we route both
+# through OpenRouter's OpenAI-compatible endpoint instead, so no Google credential is required.
+_OR_KEY = os.getenv("OPENROUTER_API_KEY")
+_OR_BASE = "https://openrouter.ai/api/v1"
+_JUDGE_MODEL = os.getenv("JUDGE_MODEL", "google/gemini-2.5-flash")
+_AGENT_MODEL = os.getenv("AGENT_MODEL", "google/gemini-2.5-flash")
+
+def _make_llm(model: str):
+    if _OR_KEY:
+        return ChatOpenAI(model=model, api_key=_OR_KEY, base_url=_OR_BASE)
+    return ChatGoogle(model="gemini-2.5-flash", api_key=os.getenv("GOOGLE_API_KEY"))
+
+JUDGE_LLM = _make_llm(_JUDGE_MODEL)
 TASKS_FILE = Path(__file__).parent / "BU_Bench_V1.enc"
-MAX_CONCURRENT = 3
+MAX_CONCURRENT = int(__import__("os").environ.get("MAX_CONCURRENT","10"))
 TASK_TIMEOUT = 1800  # 30 minutes max per task
 
 AGENT_FRAMEWORK_NAME = "BrowserUse"
@@ -61,9 +73,11 @@ def encode_screenshots(paths: list[str]) -> list[str]:
 
 
 def load_tasks() -> list[dict]:
-    key = base64.urlsafe_b64encode(hashlib.sha256(b"BU_Bench_V1").digest())
-    encrypted = base64.b64decode(TASKS_FILE.read_text())
-    return json.loads(Fernet(key).decrypt(encrypted))
+    # BENCH env picks the suite: BU_Bench_V1 (agent capability, default) or Stealth_Bench_V1.
+    name = os.environ.get("BENCH", "BU_Bench_V1")
+    f = Path(__file__).parent / f"{name}.enc"
+    key = base64.urlsafe_b64encode(hashlib.sha256(name.encode()).digest())
+    return json.loads(Fernet(key).decrypt(base64.b64decode(f.read_text())))
 
 
 async def create_browser(browser_provider) -> Browser:
@@ -106,7 +120,8 @@ async def run_task(
             # You can use any OpenAI API compatible model by changing base_url. You can use ollama too. See https://docs.browser-use.com/supported-models for info
             agent = Agent(
                 task=task["confirmed_task"],
-                llm=llm or ChatBrowserUse(model="bu-2-0"),
+                llm=llm or (ChatBrowserUse(model="bu-2-0") if os.getenv("BROWSER_USE_API_KEY")
+                    else _make_llm(_AGENT_MODEL)),
                 browser=browser,
             )
 
@@ -235,7 +250,7 @@ async def main():
 
     # Build run key and paths
     run_start = datetime.now().strftime("%Y%m%d_%H%M%S")
-    run_key = f"{AGENT_FRAMEWORK_NAME}_{AGENT_FRAMEWORK_VERSION}_browser_{browser_name}_model_{MODEL_NAME}"
+    run_key = f"{os.environ.get(chr(66)+chr(69)+chr(78)+chr(67)+chr(72),'BU_Bench_V1')}_{AGENT_FRAMEWORK_NAME}_{AGENT_FRAMEWORK_VERSION}_browser_{browser_name}_model_{MODEL_NAME}"
     run_data_dir = (
         Path(__file__).parent / "run_data" / f"{run_key}_start_at_{run_start}"
     )
