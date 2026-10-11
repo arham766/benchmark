@@ -1,0 +1,56 @@
+name: tilion-computesdk-harness
+# ComputeSDK's own sandbox TTI harness (github.com/computesdk/benchmarks, Node 24, benchsdk-runner,
+# benchmarks/sandbox/tti.bench.ts), unmodified, with Tilion added as a provider, on the same runner
+# profile ComputeSDK uses. --no-ingest: nothing is sent to ComputeSDK. Runs on a push to the
+# tilion-harness branch, or by hand from the Actions tab.
+on:
+  push:
+    branches: [tilion-harness]
+  workflow_dispatch:
+    inputs:
+      concurrency:
+        description: sandboxes started at once
+        default: "100"
+jobs:
+  burst:
+    runs-on: namespace-profile-default
+    timeout-minutes: 60
+    env:
+      TILION_API_KEY: ${{ secrets.TILION_BENCH_API_KEY }}
+      TILION_BASE_URL: ${{ secrets.TILION_BASE_URL }}
+      SIZE: ${{ github.event.inputs.concurrency || '100' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: tilion
+      - uses: actions/checkout@v4
+        with:
+          repository: computesdk/benchmarks
+          path: cbench
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: cbench/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install and build their harness, as their workflow does
+        working-directory: cbench
+        run: |
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm -r --filter './packages/**' run build
+          pnpm add -w @computesdk/provider --ignore-scripts
+      - name: Add Tilion as a provider
+        run: python3 tilion/tilion-harness/add_tilion_to_computesdk.py cbench
+      - name: Round trip to the service (context)
+        run: for i in 1 2 3; do curl -s -o /dev/null -w '%{time_namelookup} dns, %{time_connect} connect, %{time_appconnect} tls, %{time_total} total\n' "$TILION_BASE_URL/health"; done
+      - name: Burst TTI, their command
+        working-directory: cbench
+        run: |
+          npx tsx packages/benchsdk-runner/dist/bin.js run benchmarks/sandbox/tti.bench.ts \
+            --provider tilion --iterations "$SIZE" --concurrency "$SIZE" --no-ingest
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: computesdk-harness-results
+          path: cbench/results/burst_tti/
+          if-no-files-found: ignore
